@@ -4,7 +4,7 @@ Trabalho 1 da disciplina de PHP — UTFPR.
 
 ## Integrantes
 - Andrey Felipe de Lima — RA 1554760
-- Davi — RA (preencher)
+- Davi — RA 2663910
 
 ## Descrição
 Aplicação web em PHP 8+ (sem framework) para gestão de uma clínica veterinária:
