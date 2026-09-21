@@ -8,6 +8,17 @@ use App\Core\Router;
 use App\Controllers\AuthController;
 use App\Controllers\UsuarioController;
 
+set_error_handler(function ($severity, $message, $file, $line) {
+    throw new \ErrorException($message, 0, $severity, $file, $line);
+});
+
+set_exception_handler(function (\Throwable $e) {
+    error_log($e->getMessage());
+    http_response_code(500);
+    require __DIR__ . '/../app/Views/layout/500.php';
+    exit;
+});
+
 $router = new Router();
 
 $router->get('/login', [AuthController::class, 'showLogin']);
