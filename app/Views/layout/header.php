@@ -1,4 +1,4 @@
-<?php $usuario = \App\Core\Auth::user(); ?>
+<?php $usuarioLogado = \App\Core\Auth::user(); ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -13,10 +13,10 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
             <a class="navbar-brand" href="/usuarios">Clínica Vet</a>
-            <?php if ($usuario): ?>
+            <?php if ($usuarioLogado): ?>
                 <div class="d-flex align-items-center text-light">
-                    <span class="me-3"><?= htmlspecialchars($usuario['nome']) ?>
-                        (<?= htmlspecialchars($usuario['perfil']) ?>)</span>
+                    <span class="me-3"><?= htmlspecialchars($usuarioLogado['nome']) ?>
+                        (<?= htmlspecialchars($usuarioLogado['perfil']) ?>)</span>
                     <form method="post" action="/logout" class="m-0">
                         <button class="btn btn-outline-light btn-sm" type="submit">Sair</button>
                     </form>
