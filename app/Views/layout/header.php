@@ -14,6 +14,12 @@
         <div class="container">
             <a class="navbar-brand" href="/usuarios">Clínica Vet</a>
             <?php if ($usuarioLogado): ?>
+                <div class="navbar-nav me-auto">
+                    <a class="nav-link text-white" href="/usuarios">Usuários</a>
+                    <a class="nav-link text-white" href="/tutores">Tutores</a>
+                    <a class="nav-link text-white" href="/animais">Animais</a>
+                    <a class="nav-link text-white" href="/consultas">Consultas</a>
+                </div>
                 <div class="d-flex align-items-center text-light">
                     <span class="me-3"><?= htmlspecialchars($usuarioLogado['nome']) ?>
                         (<?= htmlspecialchars($usuarioLogado['perfil']) ?>)</span>
