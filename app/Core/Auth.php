@@ -49,8 +49,11 @@ class Auth
         self::requireLogin();
 
         if ($_SESSION['usuario_perfil'] !== $perfil) {
-            http_response_code(403);
-            require __DIR__ . '/../Views/layout/403.php';
+            $_SESSION['flash'][] = [
+                'tipo' => 'erro',
+                'mensagem' => 'Você não tem permissão para acessar essa página.',
+            ];
+            header('Location: /consultas');
             exit;
         }
     }

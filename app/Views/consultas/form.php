@@ -41,7 +41,7 @@
         <div class="col-md-6 mb-3">
             <label class="form-label">Data</label>
             <input type="date" name="data" class="form-control <?= isset($erros['data']) ? 'is-invalid' : '' ?>"
-                value="<?= htmlspecialchars($old['data'] ?? $dataAtual) ?>">
+                min="<?= date('Y-m-d') ?>" value="<?= htmlspecialchars($old['data'] ?? $dataAtual) ?>">
             <?php if (isset($erros['data'])): ?><div class="invalid-feedback"><?= $erros['data'] ?></div><?php endif; ?>
         </div>
         <div class="col-md-6 mb-3">

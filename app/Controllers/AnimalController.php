@@ -76,8 +76,19 @@ class AnimalController extends Controller
                   ->obrigatorio('nome', $nome, 'Nome é obrigatório')
                   ->obrigatorio('especie', $especie, 'Espécie é obrigatória');
 
-        if ($dataNascimento && $dataNascimento > date('Y-m-d')) {
-            $_SESSION['erros']['data_nascimento'] = 'Data de nascimento não pode ser no futuro';
+        if ($dataNascimento) {
+            $dataValida = \DateTime::createFromFormat('!Y-m-d', $dataNascimento);
+            $errosData = \DateTime::getLastErrors();
+            $dataInvalida = $dataValida === false
+                || ($errosData !== false && ($errosData['warning_count'] > 0 || $errosData['error_count'] > 0));
+
+            if ($dataInvalida) {
+                $_SESSION['erros']['data_nascimento'] = 'Informe uma data de nascimento válida';
+            } elseif ($dataNascimento < '1900-01-01') {
+                $_SESSION['erros']['data_nascimento'] = 'Data de nascimento deve ser a partir de 01/01/1900';
+            } elseif ($dataNascimento > date('Y-m-d')) {
+                $_SESSION['erros']['data_nascimento'] = 'Data de nascimento não pode ser no futuro';
+            }
         }
 
         if ($validator->temErro() || isset($_SESSION['erros']['data_nascimento'])) {

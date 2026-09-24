@@ -94,13 +94,27 @@ class ConsultaController extends Controller
                   ->obrigatorio('data', $data, 'Data é obrigatória')
                   ->obrigatorio('hora', $hora, 'Horário é obrigatório');
 
+        $dataHoraValida = false;
+        if ($data !== '' && $hora !== '') {
+            $dataHoraObj = \DateTime::createFromFormat('!Y-m-d H:i', $dataHora);
+            $errosDataHora = \DateTime::getLastErrors();
+            $dataHoraValida = $dataHoraObj !== false
+                && ($errosDataHora === false || ($errosDataHora['warning_count'] === 0 && $errosDataHora['error_count'] === 0));
+
+            if (!$dataHoraValida) {
+                $_SESSION['erros']['data'] = 'Informe uma data e horário válidos';
+            } elseif ($dataHoraObj < new \DateTime()) {
+                $_SESSION['erros']['data'] = 'A consulta não pode ser marcada no passado';
+            }
+        }
+
         $consultaModel = new Consulta();
 
-        if (!$validator->temErro() && $consultaModel->existeConflito($veterinarioId, $dataHora, $id)) {
+        if (!$validator->temErro() && $dataHoraValida && $consultaModel->existeConflito($veterinarioId, $dataHora, $id)) {
             $_SESSION['erros']['hora'] = 'Este veterinário já tem consulta marcada nesse horário';
         }
 
-        if ($validator->temErro() || isset($_SESSION['erros']['hora'])) {
+        if ($validator->temErro() || !$dataHoraValida || isset($_SESSION['erros']['data']) || isset($_SESSION['erros']['hora'])) {
             $_SESSION['erros'] = array_merge($validator->getErros(), $_SESSION['erros'] ?? []);
             $_SESSION['old'] = $_POST;
             $this->redirect($id ? '/consultas/editar?id=' . $id : '/consultas/novo');

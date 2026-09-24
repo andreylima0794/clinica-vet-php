@@ -24,6 +24,10 @@
    mysql -u root -p < database/schema.sql
    mysql -u root -p < database/seed.sql
    ```
+   Se o banco já existia antes da atualização do cadastro de tutores, execute também:
+   ```bash
+   mysql -u root -p < database/upgrade_tutores_endereco.sql
+   ```
 
 4. Copie o arquivo de configuração e edite com suas credenciais:
    ```bash

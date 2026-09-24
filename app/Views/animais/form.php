@@ -41,6 +41,7 @@
     <div class="mb-3">
         <label class="form-label">Data de nascimento</label>
         <input type="date" name="data_nascimento" class="form-control <?= isset($erros['data_nascimento']) ? 'is-invalid' : '' ?>"
+            min="1900-01-01" max="<?= date('Y-m-d') ?>"
             value="<?= htmlspecialchars($old['data_nascimento'] ?? $animal['data_nascimento'] ?? '') ?>">
         <?php if (isset($erros['data_nascimento'])): ?><div class="invalid-feedback"><?= $erros['data_nascimento'] ?></div><?php endif; ?>
     </div>
