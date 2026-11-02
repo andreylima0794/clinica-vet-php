@@ -23,7 +23,6 @@ class UsuarioController extends Controller
 
     public function create(): void
     {
-        //die('CREATE FOI CHAMADO');
         Auth::requireRole('admin');
         $temErro = !empty($_SESSION['flash']);
         $this->render('usuarios/form', [
@@ -50,10 +49,10 @@ class UsuarioController extends Controller
         $this->redirect('/usuarios');
     }
 
-    public function edit(): void
+    public function edit(string $id): void
     {
         Auth::requireRole('admin');
-        $id = (int) ($_GET['id'] ?? 0);
+        $id = (int) $id;
         $usuario = $this->usuarios->find($id);
 
         if (!$usuario) {
@@ -68,15 +67,16 @@ class UsuarioController extends Controller
         ]);
         unset($_SESSION['old']);
     }
-    public function update(): void
+
+    public function update(string $id): void
     {
         Auth::requireRole('admin');
-        $id = (int) ($_POST['id'] ?? 0);
+        $id = (int) $id;
 
         $dados = $this->validar($_POST, exigirSenha: false, idAtual: $id);
 
         if ($dados === null) {
-            $this->redirect("/usuarios/editar?id={$id}");
+            $this->redirect("/usuarios/editar/{$id}");
         }
 
         $this->usuarios->update($id, $dados['nome'], $dados['email'], $dados['perfil']);
@@ -85,10 +85,10 @@ class UsuarioController extends Controller
         $this->redirect('/usuarios');
     }
 
-    public function inativar(): void
+    public function inativar(string $id): void
     {
         Auth::requireRole('admin');
-        $id = (int) ($_POST['id'] ?? 0);
+        $id = (int) $id;
         $usuario = $this->usuarios->find($id);
 
         if ($usuario) {
