@@ -2,10 +2,7 @@
 <h1>
     <?= $usuario ? 'Editar usuário' : 'Novo usuário' ?>
 </h1>
-<form method="post" action="<?= $usuario ? '/usuarios/editar' : '/usuarios/novo' ?>">
-    <?php if ($usuario): ?>
-        <input type="hidden" name="id" value="<?= $usuario['id'] ?>">
-    <?php endif; ?>
+<form method="post" action="<?= $usuario ? '/usuarios/editar/' . $usuario['id'] : '/usuarios/novo' ?>">
     <div class="mb-3">
         <label class="form-label">Nome</label>
         <input type="text" name="nome" class="form-control"
