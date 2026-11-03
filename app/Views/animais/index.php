@@ -4,19 +4,23 @@
     <a href="/animais/novo" class="btn btn-primary">Novo Animal</a>
 </div>
 <table class="table table-striped">
-    <thead><tr><th>Nome</th><th>Espécie</th><th>Raça</th><th>Tutor</th><th></th></tr></thead>
+    <thead><tr><th>Nome</th><th>Espécie</th><th>Raça</th><th>Idade</th><th>Tutor</th><th></th></tr></thead>
     <tbody>
         <?php foreach ($animais as $a): ?>
             <tr>
-                <td><?= htmlspecialchars($a['nome']) ?></td>
-                <td><?= htmlspecialchars($a['especie']) ?></td>
-                <td><?= htmlspecialchars($a['raca'] ?? '') ?></td>
-                <td><?= htmlspecialchars($a['tutor_nome']) ?></td>
+                <td><?= htmlspecialchars($a->nome) ?></td>
+                <td><?= htmlspecialchars($a->especie) ?></td>
+                <td><?= htmlspecialchars($a->raca ?? '') ?></td>
+                <td><?= htmlspecialchars($a->idade() ?? '') ?></td>
+                <td><?= htmlspecialchars($a->tutorNome) ?></td>
                 <td class="text-end">
-                    <a href="/animais/editar?id=<?= $a['id'] ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
+                    <a href="/animais/editar/<?= $a->id ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
                 </td>
             </tr>
         <?php endforeach; ?>
+        <?php if (!$animais): ?>
+            <tr><td colspan="6" class="text-center text-muted">Nenhum animal cadastrado.</td></tr>
+        <?php endif; ?>
     </tbody>
 </table>
 <?php require __DIR__ . '/../layout/footer.php'; ?>

@@ -58,8 +58,8 @@ $router->post('/tutores/editar/{id}', [TutorController::class, 'atualizar']);
 $router->get('/animais', [AnimalController::class, 'index']);
 $router->get('/animais/novo', [AnimalController::class, 'novo']);
 $router->post('/animais/novo', [AnimalController::class, 'criar']);
-$router->get('/animais/editar', [AnimalController::class, 'editar']);
-$router->post('/animais/editar', [AnimalController::class, 'atualizar']);
+$router->get('/animais/editar/{id}', [AnimalController::class, 'editar']);
+$router->post('/animais/editar/{id}', [AnimalController::class, 'atualizar']);
 
 $router->get('/consultas', [ConsultaController::class, 'index']);
 $router->get('/consultas/novo', [ConsultaController::class, 'novo']);
