@@ -21,9 +21,12 @@ por sessão e arquitetura MVC.
 ```
 public/         index.php (front controller), css/, js/
 app/Controllers/
-app/Models/
+app/Models/     Usuario
+app/Entities/   Tutor, Animal, Consulta (objetos de domínio com propriedades tipadas)
+app/Repositories/ acesso ao banco via PDO, retornando entidades
+app/Validators/ validação de formulário de cada entidade
 app/Views/
-app/Core/       Router, Database, Controller base, Validator, Auth
+app/Core/       Router, Database, Controller base, Repository base, Validator, Auth
 config/         config.php (não versionado) baseado em config.example.php
 database/       schema.sql, seed.sql
 docs/           INSTALACAO.md
@@ -34,7 +37,7 @@ docs/           INSTALACAO.md
 | Integrante | Atividades desenvolvidas |
 |---|---|
 | Andrey | Estrutura MVC (Router, Database, Controller base), autenticação com sessão, CRUD de usuários, controle de perfis, tratamento de erros e documentação de instalação. |
-| Davi | Validator, layout Bootstrap, CRUD de tutores, CRUD de animais, agendamento de consultas, filtros de listagem e mensagens de feedback. |
+| Davi | **T1:** Validator, layout Bootstrap, CRUD de tutores, CRUD de animais, agendamento de consultas, filtros de listagem e mensagens de feedback.<br>**T2:** entidades OOP de Tutor, Animal e Consulta; repositórios com classe base abstrata; validação extraída dos controllers para classes por entidade; URL transparente nas rotas de tutores, animais e consultas. |
 
 ## Particularidades / bugs conhecidos
 <!-- Atualizar conforme o desenvolvimento avança -->
