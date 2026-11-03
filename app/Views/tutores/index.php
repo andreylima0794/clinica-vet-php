@@ -8,15 +8,18 @@
     <tbody>
         <?php foreach ($tutores as $t): ?>
             <tr>
-                <td><?= htmlspecialchars($t['nome']) ?></td>
-                <td><?= htmlspecialchars($t['cpf']) ?></td>
-                <td><?= htmlspecialchars($t['telefone']) ?></td>
-                <td><?= htmlspecialchars($t['endereco']) ?></td>
+                <td><?= htmlspecialchars($t->nome) ?></td>
+                <td><?= htmlspecialchars($t->cpfFormatado()) ?></td>
+                <td><?= htmlspecialchars($t->telefone ?? '') ?></td>
+                <td><?= htmlspecialchars($t->enderecoCompleto()) ?></td>
                 <td class="text-end">
-                    <a href="/tutores/editar?id=<?= $t['id'] ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
+                    <a href="/tutores/editar/<?= $t->id ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
                 </td>
             </tr>
         <?php endforeach; ?>
+        <?php if (!$tutores): ?>
+            <tr><td colspan="5" class="text-center text-muted">Nenhum tutor cadastrado.</td></tr>
+        <?php endif; ?>
     </tbody>
 </table>
 <?php require __DIR__ . '/../layout/footer.php'; ?>

@@ -5,26 +5,29 @@ namespace App\Controllers;
 use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Validator;
-use App\Models\Tutor;
+use App\Entities\Tutor;
+use App\Repositories\TutorRepository;
+use App\Validators\TutorValidator;
 
 class TutorController extends Controller
 {
+    private TutorRepository $tutores;
+
+    public function __construct()
+    {
+        $this->tutores = new TutorRepository();
+    }
+
     public function index(): void
     {
         Auth::requireLogin();
-        $tutores = (new Tutor())->all();
-        $this->render('tutores/index', ['tutores' => $tutores]);
+        $this->render('tutores/index', ['tutores' => $this->tutores->all()]);
     }
 
     public function novo(): void
     {
         Auth::requireLogin();
-        $this->render('tutores/form', [
-            'tutor' => null,
-            'old' => $_SESSION['old'] ?? [],
-            'erros' => $_SESSION['erros'] ?? [],
-        ]);
-        unset($_SESSION['old'], $_SESSION['erros']);
+        $this->formulario(null);
     }
 
     public function criar(): void
@@ -33,17 +36,20 @@ class TutorController extends Controller
         $this->salvar(null);
     }
 
-    public function editar(): void
+    public function editar(string $id): void
     {
         Auth::requireLogin();
-        $id = (int) ($_GET['id'] ?? 0);
-        $tutor = (new Tutor())->find($id);
+        $this->formulario($this->buscar((int) $id));
+    }
 
-        if (!$tutor) {
-            $this->flash('erro', 'Tutor não encontrado.');
-            $this->redirect('/tutores');
-        }
+    public function atualizar(string $id): void
+    {
+        Auth::requireLogin();
+        $this->salvar($this->buscar((int) $id)->id);
+    }
 
+    private function formulario(?Tutor $tutor): void
+    {
         $this->render('tutores/form', [
             'tutor' => $tutor,
             'old' => $_SESSION['old'] ?? [],
@@ -52,72 +58,41 @@ class TutorController extends Controller
         unset($_SESSION['old'], $_SESSION['erros']);
     }
 
-    public function atualizar(): void
-    {
-        Auth::requireLogin();
-        $id = (int) ($_POST['id'] ?? 0);
-        $this->salvar($id);
-    }
-
     private function salvar(?int $id): void
     {
-        $nome = trim($_POST['nome'] ?? '');
-        $cpf = trim($_POST['cpf'] ?? '');
-        $telefone = trim($_POST['telefone'] ?? '');
-        $cep = trim($_POST['cep'] ?? '');
-        $logradouro = trim($_POST['logradouro'] ?? '');
-        $numero = trim($_POST['numero'] ?? '');
-        $complemento = trim($_POST['complemento'] ?? '');
-        $bairro = trim($_POST['bairro'] ?? '');
-        $cidade = trim($_POST['cidade'] ?? '');
-        $estado = strtoupper(trim($_POST['estado'] ?? ''));
-        $endereco = implode(', ', array_filter([
-            $logradouro . ($numero !== '' ? ', ' . $numero : ''),
-            $complemento,
-            $bairro,
-            $cidade . ($estado !== '' ? ' - ' . $estado : ''),
-            $cep,
-        ]));
-
-        $validator = new Validator();
-        $validator->obrigatorio('nome', $nome, 'Nome é obrigatório')
-                  ->cpf('cpf', $cpf, 'CPF inválido');
-
-        $erros = $validator->getErros();
-        if ((new Tutor())->cpfExists(preg_replace('/\D/', '', $cpf), $id)) {
-            $erros['cpf'] = 'Já existe um tutor cadastrado com esse CPF';
-        }
-        if ($telefone !== '' && !preg_match('/^\(?\d{2}\)?\s?9?\d{4}-?\d{4}$/', $telefone)) {
-            $erros['telefone'] = 'Telefone inválido';
-        }
-        if (!preg_match('/^\d{5}-?\d{3}$/', $cep)) {
-            $erros['cep'] = 'CEP inválido';
-        }
-        foreach (['logradouro' => 'Logradouro é obrigatório', 'numero' => 'Número é obrigatório', 'bairro' => 'Bairro é obrigatório', 'cidade' => 'Cidade é obrigatória'] as $campo => $mensagem) {
-            if (${$campo} === '') {
-                $erros[$campo] = $mensagem;
-            }
-        }
-        if (!preg_match('/^[A-Z]{2}$/', $estado)) {
-            $erros['estado'] = 'Informe uma UF válida';
-        }
+        $dados = Validator::limpar($_POST);
+        $erros = (new TutorValidator($this->tutores))->validar($dados, $id);
 
         if ($erros) {
             $_SESSION['erros'] = $erros;
-            $_SESSION['old'] = $_POST;
-            $this->redirect($id ? '/tutores/editar?id=' . $id : '/tutores/novo');
+            $_SESSION['old'] = $dados;
+            $this->redirect($id ? "/tutores/editar/{$id}" : '/tutores/novo');
         }
 
-        $tutorModel = new Tutor();
+        $tutor = Tutor::fromArray($dados);
+        $tutor->id = $id;
 
         if ($id) {
-            $tutorModel->update($id, $nome, preg_replace('/\D/', '', $cpf), $telefone, $endereco, $cep, $logradouro, $numero, $complemento, $bairro, $cidade, $estado);
+            $this->tutores->update($tutor);
             $this->flash('sucesso', 'Tutor atualizado com sucesso.');
         } else {
-            $tutorModel->create($nome, preg_replace('/\D/', '', $cpf), $telefone, $endereco, $cep, $logradouro, $numero, $complemento, $bairro, $cidade, $estado);
+            $this->tutores->create($tutor);
             $this->flash('sucesso', 'Tutor cadastrado com sucesso.');
         }
 
         $this->redirect('/tutores');
+    }
+
+    /** Busca o tutor pelo id ou volta para a listagem com mensagem de erro. */
+    private function buscar(int $id): Tutor
+    {
+        $tutor = $this->tutores->find($id);
+
+        if (!$tutor) {
+            $this->flash('erro', 'Tutor não encontrado.');
+            $this->redirect('/tutores');
+        }
+
+        return $tutor;
     }
 }

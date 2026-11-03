@@ -52,8 +52,8 @@ $router->post('/usuarios/inativar/{id}', [UsuarioController::class, 'inativar'])
 $router->get('/tutores', [TutorController::class, 'index']);
 $router->get('/tutores/novo', [TutorController::class, 'novo']);
 $router->post('/tutores/novo', [TutorController::class, 'criar']);
-$router->get('/tutores/editar', [TutorController::class, 'editar']);
-$router->post('/tutores/editar', [TutorController::class, 'atualizar']);
+$router->get('/tutores/editar/{id}', [TutorController::class, 'editar']);
+$router->post('/tutores/editar/{id}', [TutorController::class, 'atualizar']);
 
 $router->get('/animais', [AnimalController::class, 'index']);
 $router->get('/animais/novo', [AnimalController::class, 'novo']);
