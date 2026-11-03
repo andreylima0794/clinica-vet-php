@@ -64,7 +64,7 @@ $router->post('/animais/editar/{id}', [AnimalController::class, 'atualizar']);
 $router->get('/consultas', [ConsultaController::class, 'index']);
 $router->get('/consultas/novo', [ConsultaController::class, 'novo']);
 $router->post('/consultas/novo', [ConsultaController::class, 'criar']);
-$router->get('/consultas/editar', [ConsultaController::class, 'editar']);
-$router->post('/consultas/editar', [ConsultaController::class, 'atualizar']);
+$router->get('/consultas/editar/{id}', [ConsultaController::class, 'editar']);
+$router->post('/consultas/editar/{id}', [ConsultaController::class, 'atualizar']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);

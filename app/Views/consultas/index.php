@@ -8,7 +8,7 @@
     <div class="col-md-3">
         <select name="status" class="form-select">
             <option value="">Todos os status</option>
-            <?php foreach (['agendada', 'realizada', 'cancelada'] as $s): ?>
+            <?php foreach (\App\Entities\Consulta::STATUS as $s): ?>
                 <option value="<?= $s ?>" <?= $filtros['status'] === $s ? 'selected' : '' ?>><?= ucfirst($s) ?></option>
             <?php endforeach; ?>
         </select>
@@ -39,15 +39,18 @@
     <tbody>
         <?php foreach ($consultas as $c): ?>
             <tr>
-                <td><?= htmlspecialchars($c['data_hora']) ?></td>
-                <td><?= htmlspecialchars($c['animal_nome']) ?></td>
-                <td><?= htmlspecialchars($c['veterinario_nome']) ?></td>
-                <td><?= htmlspecialchars($c['status']) ?></td>
+                <td><?= $c->dataHora->format('d/m/Y H:i') ?></td>
+                <td><?= htmlspecialchars($c->animalNome) ?></td>
+                <td><?= htmlspecialchars($c->veterinarioNome) ?></td>
+                <td><?= ucfirst($c->status) ?></td>
                 <td class="text-end">
-                    <a href="/consultas/editar?id=<?= $c['id'] ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
+                    <a href="/consultas/editar/<?= $c->id ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
                 </td>
             </tr>
         <?php endforeach; ?>
+        <?php if (!$consultas): ?>
+            <tr><td colspan="5" class="text-center text-muted">Nenhuma consulta encontrada.</td></tr>
+        <?php endif; ?>
     </tbody>
 </table>
-<?php require __DIR__ . '/../layout/footer.php'; ?>
+<?php require __DIR__ . '/../layout/footer.php'; ?>
