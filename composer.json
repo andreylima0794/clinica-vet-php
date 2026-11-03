@@ -3,7 +3,8 @@
     "description": "Sistema de Gestao de Clinica Veterinaria - Trabalho 1 (PHP 8+)",
     "type": "project",
     "require": {
-        "php": ">=8.0"
+        "php": ">=8.0",
+        "monolog/monolog": "^3.12"
     },
     "autoload": {
         "psr-4": {

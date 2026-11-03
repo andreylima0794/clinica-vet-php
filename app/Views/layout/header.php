@@ -12,10 +12,12 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="/usuarios">Clínica Vet</a>
+            <a class="navbar-brand" href="<?= $usuarioLogado && $usuarioLogado['perfil'] === 'admin' ? '/usuarios' : '/consultas' ?>">Clínica Vet</a>
             <?php if ($usuarioLogado): ?>
                 <div class="navbar-nav me-auto">
-                    <a class="nav-link text-white" href="/usuarios">Usuários</a>
+                    <?php if ($usuarioLogado['perfil'] === 'admin'): ?>
+                        <a class="nav-link text-white" href="/usuarios">Usuários</a>
+                    <?php endif; ?>
                     <a class="nav-link text-white" href="/tutores">Tutores</a>
                     <a class="nav-link text-white" href="/animais">Animais</a>
                     <a class="nav-link text-white" href="/consultas">Consultas</a>

@@ -14,7 +14,7 @@
    cd clinica-vet-php
    ```
 
-2. Instale as dependências:
+2. Instale as dependências (inclui o pacote `monolog/monolog`, usado para registrar erros em arquivo):
    ```bash
    composer install
    ```
@@ -23,6 +23,10 @@
    ```bash
    mysql -u root -p < database/schema.sql
    mysql -u root -p < database/seed.sql
+   ```
+   Se o banco já existia antes da atualização do cadastro de tutores, execute também:
+   ```bash
+   mysql -u root -p < database/upgrade_tutores_endereco.sql
    ```
 
 4. Copie o arquivo de configuração e edite com suas credenciais:
@@ -39,6 +43,12 @@
 
 ## Usuário de teste
 - E-mail: `admin@clinica.test`
-- Senha: (definir após gerar o hash com `password_hash`)
+- Senha: `admin123`
 
-<!-- TODO: atualizar credenciais reais e capturas de tela conforme o projeto avança -->
+## Logs de erro
+Exceções não tratadas são registradas em `storage/logs/app.log` (criado automaticamente
+na primeira requisição que gerar erro). Essa pasta não é versionada no Git.
+
+## URLs
+As rotas de usuários usam URL transparente, por exemplo: `/usuarios/editar/3`
+(o `3` é o id do usuário, direto na URL, sem query string).

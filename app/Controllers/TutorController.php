@@ -64,14 +64,46 @@ class TutorController extends Controller
         $nome = trim($_POST['nome'] ?? '');
         $cpf = trim($_POST['cpf'] ?? '');
         $telefone = trim($_POST['telefone'] ?? '');
-        $endereco = trim($_POST['endereco'] ?? '');
+        $cep = trim($_POST['cep'] ?? '');
+        $logradouro = trim($_POST['logradouro'] ?? '');
+        $numero = trim($_POST['numero'] ?? '');
+        $complemento = trim($_POST['complemento'] ?? '');
+        $bairro = trim($_POST['bairro'] ?? '');
+        $cidade = trim($_POST['cidade'] ?? '');
+        $estado = strtoupper(trim($_POST['estado'] ?? ''));
+        $endereco = implode(', ', array_filter([
+            $logradouro . ($numero !== '' ? ', ' . $numero : ''),
+            $complemento,
+            $bairro,
+            $cidade . ($estado !== '' ? ' - ' . $estado : ''),
+            $cep,
+        ]));
 
         $validator = new Validator();
         $validator->obrigatorio('nome', $nome, 'Nome é obrigatório')
                   ->cpf('cpf', $cpf, 'CPF inválido');
 
-        if ($validator->temErro()) {
-            $_SESSION['erros'] = $validator->getErros();
+        $erros = $validator->getErros();
+        if ((new Tutor())->cpfExists(preg_replace('/\D/', '', $cpf), $id)) {
+            $erros['cpf'] = 'Já existe um tutor cadastrado com esse CPF';
+        }
+        if ($telefone !== '' && !preg_match('/^\(?\d{2}\)?\s?9?\d{4}-?\d{4}$/', $telefone)) {
+            $erros['telefone'] = 'Telefone inválido';
+        }
+        if (!preg_match('/^\d{5}-?\d{3}$/', $cep)) {
+            $erros['cep'] = 'CEP inválido';
+        }
+        foreach (['logradouro' => 'Logradouro é obrigatório', 'numero' => 'Número é obrigatório', 'bairro' => 'Bairro é obrigatório', 'cidade' => 'Cidade é obrigatória'] as $campo => $mensagem) {
+            if (${$campo} === '') {
+                $erros[$campo] = $mensagem;
+            }
+        }
+        if (!preg_match('/^[A-Z]{2}$/', $estado)) {
+            $erros['estado'] = 'Informe uma UF válida';
+        }
+
+        if ($erros) {
+            $_SESSION['erros'] = $erros;
             $_SESSION['old'] = $_POST;
             $this->redirect($id ? '/tutores/editar?id=' . $id : '/tutores/novo');
         }
@@ -79,10 +111,10 @@ class TutorController extends Controller
         $tutorModel = new Tutor();
 
         if ($id) {
-            $tutorModel->update($id, $nome, $cpf, $telefone, $endereco);
+            $tutorModel->update($id, $nome, preg_replace('/\D/', '', $cpf), $telefone, $endereco, $cep, $logradouro, $numero, $complemento, $bairro, $cidade, $estado);
             $this->flash('sucesso', 'Tutor atualizado com sucesso.');
         } else {
-            $tutorModel->create($nome, $cpf, $telefone, $endereco);
+            $tutorModel->create($nome, preg_replace('/\D/', '', $cpf), $telefone, $endereco, $cep, $logradouro, $numero, $complemento, $bairro, $cidade, $estado);
             $this->flash('sucesso', 'Tutor cadastrado com sucesso.');
         }
 
