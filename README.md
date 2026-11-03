@@ -42,3 +42,8 @@ docs/           INSTALACAO.md
 
 ## Instalação
 Veja [docs/INSTALACAO.md](docs/INSTALACAO.md).
+
+## Relatório técnico
+Veja [docs/RELATORIO_T2.pdf](docs/RELATORIO_T2.pdf) para a descrição das mudanças,
+dos arquivos novos e da verificação dos requisitos do Trabalho 2. A versão editável
+da documentação está em [docs/RELATORIO_T2.html](docs/RELATORIO_T2.html).

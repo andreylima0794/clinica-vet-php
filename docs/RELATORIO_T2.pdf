@@ -1,0 +1,859 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R] /Count 7 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+5 0 obj
+<< /Length 2733 >>
+stream
+BT
+/F1 9 Tf
+45 800 Td
+12 TL
+(Trabalho 2 - PHP / UTFPR) Tj
+T*
+() Tj
+T*
+(Clinica Vet) Tj
+T*
+() Tj
+T*
+(Relatorio tecnico de evolucao, arquivos e verificacao dos requisitos do enunciado.) Tj
+T*
+() Tj
+T*
+(Repositorio: github.com/andreylima0794/clinica-vet-php) Tj
+T*
+() Tj
+T*
+(Versao analisada: b1228b3 \(branch main\)) Tj
+T*
+() Tj
+T*
+(Data da analise: 03/11/2026) Tj
+T*
+() Tj
+T*
+(Tema: gestao de tutores, animais, consultas e usuarios de uma clinica veterinaria) Tj
+T*
+() Tj
+T*
+(Conclusao executiva: o codigo demonstra a maior parte dos requisitos tecnicos do Trabalho 2. Existe,) Tj
+T*
+(porem, uma pendencia critica: o README registra somente dois integrantes, enquanto o enunciado exige um) Tj
+T*
+(trio obrigatorio. Esse dado precisa ser corrigido ou esclarecido antes da entrega.) Tj
+T*
+() Tj
+T*
+(1. Resumo da evolucao) Tj
+T*
+() Tj
+T*
+(A versao atual continua o Trabalho 1 e reorganiza o sistema para uma arquitetura orientada a objetos. A) Tj
+T*
+(mudanca principal foi retirar a responsabilidade de acesso a dados dos modelos antigos, criar entidades) Tj
+T*
+(de dominio e concentrar consultas SQL em repositorios.) Tj
+T*
+() Tj
+T*
+(AreaAntesAtual) Tj
+T*
+() Tj
+T*
+(Estrutura de dadosModelos misturavam representacao e acesso ao banco.Entities representam os objetos e) Tj
+T*
+(Repositories concentram persistencia.) Tj
+T*
+() Tj
+T*
+(Usuariosapp/Models/Usuario.php.Usuario + UsuarioRepository; controllers recebem dados pela nova camada.) Tj
+T*
+() Tj
+T*
+(Tutores, animais e consultasModelos e controllers da primeira versao.Entidades tipadas, repositorios e) Tj
+T*
+(validadores especificos por dominio.) Tj
+T*
+() Tj
+T*
+(ValidacaoRegras concentradas ou compartilhadas de forma menos estruturada.AnimalValidator,) Tj
+T*
+(TutorValidator e ConsultaValidator, apoiados pelo Validator base.) Tj
+T*
+() Tj
+T*
+(URLsHavia uso de parametros de consulta em fluxos de edicao.Rotas como /tutores/editar/5, com parametros) Tj
+T*
+(dinamicos reconhecidos pelo router.) Tj
+T*
+() Tj
+T*
+(ErrosTratamento basico.Monolog registra excecoes em storage/logs/app.log; existe tela HTTP 500.) Tj
+T*
+() Tj
+T*
+(DependenciasAutoload e dependencias menos completos.Composer declara Monolog e autoload PSR-4;) Tj
+T*
+(composer.lock fixa as versoes.) Tj
+T*
+() Tj
+T*
+(2. Arquivos novos ou criados na migracao) Tj
+T*
+() Tj
+T*
+(ArquivoResponsabilidade) Tj
+T*
+() Tj
+T*
+(app/Core/Repository.phpClasse base abstrata para repositorios. Mantem a conexao PDO e oferece operacoes) Tj
+T*
+(comuns, reduzindo duplicacao.) Tj
+T*
+() Tj
+T*
+(app/Entities/Usuario.phpObjeto de dominio do usuario, com propriedades tipadas e dados de identidade,) Tj
+T*
+(perfil e estado.) Tj
+T*
+() Tj
+T*
+(app/Entities/Tutor.phpObjeto de dominio do tutor, incluindo identificacao, contato e endereco.) Tj
+T*
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
+endobj
+7 0 obj
+<< /Length 3009 >>
+stream
+BT
+/F1 9 Tf
+45 800 Td
+12 TL
+() Tj
+T*
+(app/Entities/Animal.phpObjeto de dominio do animal, incluindo tutor, especie, raca, nascimento e peso.) Tj
+T*
+() Tj
+T*
+(app/Entities/Consulta.phpObjeto de dominio da consulta, incluindo animal, veterinario, data, status e) Tj
+T*
+(observacoes.) Tj
+T*
+() Tj
+T*
+(app/Repositories/UsuarioRepository.phpConsulta, cria, atualiza e inativa usuarios; transforma resultados) Tj
+T*
+(do banco em entidades.) Tj
+T*
+() Tj
+T*
+(app/Repositories/TutorRepository.phpPersistencia e busca de tutores usando PDO e statements preparados.) Tj
+T*
+() Tj
+T*
+(app/Repositories/AnimalRepository.phpPersistencia de animais e consultas relacionadas a tutores.) Tj
+T*
+() Tj
+T*
+(app/Repositories/ConsultaRepository.phpRepositorio que substituiu o antigo modelo de consulta; trata) Tj
+T*
+(agendamento, filtros e atualizacao.) Tj
+T*
+() Tj
+T*
+(app/Validators/AnimalValidator.phpRegras de validacao dos dados de animais.) Tj
+T*
+() Tj
+T*
+(app/Validators/TutorValidator.phpRegras de validacao dos dados de tutores.) Tj
+T*
+() Tj
+T*
+(app/Validators/ConsultaValidator.phpRegras de validacao dos dados de consultas.) Tj
+T*
+() Tj
+T*
+(Nota: app/Repositories/ConsultaRepository.php e uma renomeacao/evolucao de app/Models/Consulta.php. Os) Tj
+T*
+(modelos antigos de usuario, tutor e animal foram removidos; os arquivos .gitkeep mantem pastas vazias) Tj
+T*
+(no repositorio.) Tj
+T*
+() Tj
+T*
+(3. Arquivos existentes que mudaram) Tj
+T*
+() Tj
+T*
+(ArquivoAlteracao observada) Tj
+T*
+() Tj
+T*
+(public/index.phpRegistra as rotas da aplicacao, carrega Composer, configura Monolog, converte erros em) Tj
+T*
+(excecoes e trata erros nao capturados.) Tj
+T*
+() Tj
+T*
+(app/Core/Router.phpPassou a converter placeholders como {id} em grupos nomeados de expressao regular e) Tj
+T*
+(encaminhar os parametros ao controller.) Tj
+T*
+() Tj
+T*
+(app/Core/Validator.phpRecebe regras de validacao reutilizaveis e retorna mensagens por campo.) Tj
+T*
+() Tj
+T*
+(app/Core/Auth.phpFoi adaptado para trabalhar com o repositorio de usuarios e manter autenticacao/perfis.) Tj
+T*
+() Tj
+T*
+(app/Controllers/AnimalController.phpPassou a usar entidade, repositorio e validador de animal.) Tj
+T*
+() Tj
+T*
+(app/Controllers/TutorController.phpPassou a usar entidade, repositorio e validador de tutor.) Tj
+T*
+() Tj
+T*
+(app/Controllers/ConsultaController.phpPassou a usar entidade, repositorio e validador de consulta,) Tj
+T*
+(mantendo filtros/agendamento.) Tj
+T*
+() Tj
+T*
+(app/Controllers/UsuarioController.phpPassou a usar entidade/repositorio e rotas de edicao com {id}.) Tj
+T*
+() Tj
+T*
+(app/Controllers/AuthController.phpAtualizado para a nova camada de usuarios e fluxo de login.) Tj
+T*
+() Tj
+T*
+(app/Views/animais/*Formularios e links foram ajustados para URLs transparentes e feedback de validacao.) Tj
+T*
+() Tj
+T*
+(app/Views/tutores/*Formularios e links foram ajustados para URLs transparentes e feedback de validacao.) Tj
+T*
+() Tj
+T*
+(app/Views/consultas/*Formularios e links foram ajustados para URLs transparentes e feedback de validacao.) Tj
+T*
+ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 10 0 R >>
+endobj
+9 0 obj
+<< /Length 2707 >>
+stream
+BT
+/F1 9 Tf
+45 800 Td
+12 TL
+() Tj
+T*
+(app/Views/usuarios/*Links e formularios de edicao passaram de query string para parametro na rota.) Tj
+T*
+() Tj
+T*
+(composer.json / composer.lockComposer declara monolog/monolog ^3.12, autoload PSR-4 e dependencias) Tj
+T*
+(travadas.) Tj
+T*
+() Tj
+T*
+(README.mdAtualiza estrutura, tecnologias e atividades declaradas para o Trabalho 2.) Tj
+T*
+() Tj
+T*
+(docs/INSTALACAO.mdDocumenta Composer, Monolog, logs, banco, configuracao e URLs transparentes.) Tj
+T*
+() Tj
+T*
+(4. Evidencias de funcionamento) Tj
+T*
+() Tj
+T*
+(PHP local em uso: PHP 8.5.11.) Tj
+T*
+() Tj
+T*
+(Servidor iniciado com php -S localhost:8000 -t public.) Tj
+T*
+() Tj
+T*
+(MySQL local respondeu mysqld is alive.) Tj
+T*
+() Tj
+T*
+(A pagina inicial respondeu HTTP 200 apos composer install.) Tj
+T*
+() Tj
+T*
+(O banco pode ser criado pelo database/schema.sql e populado pelo database/seed.sql.) Tj
+T*
+() Tj
+T*
+(5. Mapa arquivo a arquivo) Tj
+T*
+() Tj
+T*
+(Entrada e nucleo da aplicacao) Tj
+T*
+() Tj
+T*
+(ArquivoO que fazOnde isso aparece na execucao) Tj
+T*
+() Tj
+T*
+(public/index.phpFront controller: carrega Composer, inicia sessao, configura Monolog, registra rotas e) Tj
+T*
+(despacha a requisicao.E o primeiro arquivo executado pelo servidor PHP.) Tj
+T*
+() Tj
+T*
+(app/Core/Router.phpRegistra rotas GET/POST, transforma {id} em regex e chama controller/acao com) Tj
+T*
+(parametros.Entre a URL recebida e o controller escolhido.) Tj
+T*
+() Tj
+T*
+(app/Core/Database.phpCria uma conexao PDO unica usando config/config.php, MySQL e modo de excecao.Usado) Tj
+T*
+(pelos repositorios quando uma consulta SQL e executada.) Tj
+T*
+() Tj
+T*
+(app/Core/Repository.phpNovo. Classe base abstrata com conexao, busca por ID e conversao comum de linhas) Tj
+T*
+(em entidades.E herdado por todos os repositorios; evita repetir a infraestrutura de PDO.) Tj
+T*
+() Tj
+T*
+(app/Core/Controller.phpClasse base com render, redirect e flash.Controllers usam esses metodos para) Tj
+T*
+(exibir views, redirecionar e enviar feedback.) Tj
+T*
+() Tj
+T*
+(app/Core/Auth.phpConsulta o usuario autenticado na sessao e verifica login/perfil.Protege paginas e) Tj
+T*
+(decide permissoes de usuario, atendente e veterinario.) Tj
+T*
+() Tj
+T*
+(app/Core/Validator.phpValidador base com regras para obrigatoriedade, CPF, telefone, CEP, UF, data,) Tj
+T*
+(numero e listas permitidas.E reutilizado pelos validadores especificos antes de salvar dados.) Tj
+T*
+() Tj
+T*
+(Arquivos novos de dominio) Tj
+T*
+() Tj
+T*
+(ArquivoO que fazPonto para explicar na apresentacao) Tj
+T*
+() Tj
+T*
+(app/Entities/Usuario.phpNovo. Representa usuario com propriedades tipadas e conversao por toArray.O) Tj
+T*
+(dominio deixa de depender diretamente da linha crua do banco.) Tj
+T*
+() Tj
+T*
+ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 12 0 R >>
+endobj
+11 0 obj
+<< /Length 2607 >>
+stream
+BT
+/F1 9 Tf
+45 800 Td
+12 TL
+(app/Entities/Tutor.phpNovo. Representa tutor e seus dados de contato/endereco; possui enderecoCompleto e) Tj
+T*
+(cpfFormatado.Centraliza comportamento do tutor em um objeto, em vez de espalhar formatacao nas views.) Tj
+T*
+() Tj
+T*
+(app/Entities/Animal.phpNovo. Representa animal vinculado a tutor; possui idade e toArray.Modela o) Tj
+T*
+(relacionamento animal-tutor e os dados tipados do cadastro.) Tj
+T*
+() Tj
+T*
+(app/Entities/Consulta.phpNovo. Representa consulta, status, animal, veterinario e observacoes; possui) Tj
+T*
+(estaCancelada.Concentra regra simples de dominio sobre o status da consulta.) Tj
+T*
+() Tj
+T*
+(Repositorios novos) Tj
+T*
+() Tj
+T*
+(ArquivoResponsabilidade e principais operacoes) Tj
+T*
+() Tj
+T*
+(app/Repositories/UsuarioRepository.phpNovo. Busca por email, lista, cria, atualiza, verifica email) Tj
+T*
+(duplicado e ativa/inativa usuarios.) Tj
+T*
+() Tj
+T*
+(app/Repositories/TutorRepository.phpNovo. Lista, cria e atualiza tutores; verifica CPF duplicado;) Tj
+T*
+(converte linhas em Tutor.) Tj
+T*
+() Tj
+T*
+(app/Repositories/AnimalRepository.phpNovo. Lista, cria e atualiza animais; trata o vinculo com tutor;) Tj
+T*
+(converte linhas em Animal.) Tj
+T*
+() Tj
+T*
+(app/Repositories/ConsultaRepository.phpNovo por renomeacao/evolucao. Lista com filtros, verifica) Tj
+T*
+(conflito de agenda, lista veterinarios, cria e atualiza consultas.) Tj
+T*
+() Tj
+T*
+(Validadores novos) Tj
+T*
+() Tj
+T*
+(ArquivoResponsabilidade) Tj
+T*
+() Tj
+T*
+(app/Validators/TutorValidator.phpNovo. Valida campos do tutor e consulta o repositorio para impedir CPF) Tj
+T*
+(duplicado.) Tj
+T*
+() Tj
+T*
+(app/Validators/AnimalValidator.phpNovo. Valida campos do animal e confirma se o tutor informado existe.) Tj
+T*
+() Tj
+T*
+(app/Validators/ConsultaValidator.phpNovo. Valida animal, veterinario, data/hora e status da consulta.) Tj
+T*
+() Tj
+T*
+(Controllers) Tj
+T*
+() Tj
+T*
+(ArquivoResponsabilidade) Tj
+T*
+() Tj
+T*
+(app/Controllers/AuthController.phpExibe login, autentica, cria sessao, redireciona por perfil e encerra) Tj
+T*
+(sessao.) Tj
+T*
+() Tj
+T*
+(app/Controllers/UsuarioController.phpLista, cria, edita, atualiza e inativa usuarios; valida permissao e) Tj
+T*
+(dados.) Tj
+T*
+() Tj
+T*
+(app/Controllers/TutorController.phpCoordena listagem, novo cadastro e edicao de tutores.) Tj
+T*
+() Tj
+T*
+(app/Controllers/AnimalController.phpCoordena listagem, novo cadastro e edicao de animais.) Tj
+T*
+() Tj
+T*
+(app/Controllers/ConsultaController.phpCoordena filtros, agendamento e edicao de consultas.) Tj
+T*
+() Tj
+T*
+(Views e arquivos de suporte) Tj
+T*
+() Tj
+T*
+(Arquivo/pastaO que faz) Tj
+T*
+() Tj
+T*
+ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 14 0 R >>
+endobj
+13 0 obj
+<< /Length 2429 >>
+stream
+BT
+/F1 9 Tf
+45 800 Td
+12 TL
+(app/Views/layout/header.phpAbre o HTML, carrega Bootstrap, navega no sistema e exibe mensagens flash.) Tj
+T*
+() Tj
+T*
+(app/Views/layout/footer.phpFecha a estrutura HTML e scripts da interface.) Tj
+T*
+() Tj
+T*
+(app/Views/layout/403.phpInforma acesso proibido.) Tj
+T*
+() Tj
+T*
+(app/Views/layout/404.phpInforma rota ou recurso nao encontrado.) Tj
+T*
+() Tj
+T*
+(app/Views/layout/500.phpInforma erro interno sem expor o stack trace ao usuario.) Tj
+T*
+() Tj
+T*
+(app/Views/auth/login.phpFormulario de login e mensagens de falha de autenticacao.) Tj
+T*
+() Tj
+T*
+(app/Views/usuarios/*Listagem e formularios de usuarios, incluindo ativacao/inativacao.) Tj
+T*
+() Tj
+T*
+(app/Views/tutores/*Listagem e formularios de tutores.) Tj
+T*
+() Tj
+T*
+(app/Views/animais/*Listagem e formularios de animais.) Tj
+T*
+() Tj
+T*
+(app/Views/consultas/*Listagem com filtros e formularios de consultas.) Tj
+T*
+() Tj
+T*
+(public/css/.gitkeep / public/js/.gitkeepReservam as pastas para CSS e JavaScript proprios; a interface) Tj
+T*
+(atual usa Bootstrap via CDN.) Tj
+T*
+() Tj
+T*
+(Configuracao, banco e documentacao) Tj
+T*
+() Tj
+T*
+(ArquivoO que faz) Tj
+T*
+() Tj
+T*
+(composer.jsonDeclara PHP >= 8, Monolog e autoload PSR-4 de App\\ para app/.) Tj
+T*
+() Tj
+T*
+(composer.lock / vendor/Fixam e disponibilizam as dependencias instaladas.) Tj
+T*
+() Tj
+T*
+(config/config.example.phpModelo versionado de host, porta, banco, usuario e senha.) Tj
+T*
+() Tj
+T*
+(config/config.phpConfiguracao local real; nao deve conter credenciais no Git.) Tj
+T*
+() Tj
+T*
+(database/schema.sqlCria banco e tabelas de usuarios, tutores, animais e consultas com chaves) Tj
+T*
+(estrangeiras.) Tj
+T*
+() Tj
+T*
+(database/seed.sqlInsere o usuario administrador de teste.) Tj
+T*
+() Tj
+T*
+(database/upgrade_tutores_endereco.sqlAtualiza banco existente com campos de endereco de tutor.) Tj
+T*
+() Tj
+T*
+(README.mdApresenta o projeto, tecnologias, integrantes, atividades e links de instalacao/relatorio.) Tj
+T*
+() Tj
+T*
+(docs/INSTALACAO.mdExplica requisitos, Composer, SQL, configuracao, servidor PHP, login e URLs.) Tj
+T*
+() Tj
+T*
+(docs/RELATORIO_T2.html/.pdfEste guia: mudancas do T1, responsabilidades dos arquivos, fluxos e auditoria) Tj
+T*
+(do enunciado.) Tj
+T*
+() Tj
+T*
+(6. Fluxos para demonstrar) Tj
+T*
+() Tj
+T*
+(Fluxo A: login) Tj
+T*
+() Tj
+T*
+(O navegador acessa GET /.) Tj
+T*
+() Tj
+T*
+(public/index.php inicializa Composer/sessao e entrega a rota ao Router.) Tj
+T*
+ET
+endstream
+endobj
+14 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 16 0 R >>
+endobj
+15 0 obj
+<< /Length 2911 >>
+stream
+BT
+/F1 9 Tf
+45 800 Td
+12 TL
+() Tj
+T*
+(O Router chama AuthController::showLogin, que renderiza Views/auth/login.php.) Tj
+T*
+() Tj
+T*
+(O formulario envia POST /login; AuthController::login usa Auth e UsuarioRepository::findByEmail.) Tj
+T*
+() Tj
+T*
+(Database fornece PDO; o repositorio consulta MySQL e retorna Entity\\Usuario.) Tj
+T*
+() Tj
+T*
+(Se correto, a sessao e criada e o usuario e redirecionado; se incorreto, o controller usa feedback e) Tj
+T*
+(retorna ao login.) Tj
+T*
+() Tj
+T*
+(Fluxo B: cadastrar ou editar um tutor) Tj
+T*
+() Tj
+T*
+(GET /tutores/novo ou GET /tutores/editar/5 chega ao Router; no segundo caso, {id} vira parametro.) Tj
+T*
+() Tj
+T*
+(TutorController busca um Tutor no TutorRepository e renderiza o formulario.) Tj
+T*
+() Tj
+T*
+(O POST cria os dados recebidos e chama TutorValidator::validar, que usa Validator e checa CPF duplicado.) Tj
+T*
+() Tj
+T*
+(Se houver erro, o controller envia erros para a view. Se estiver valido, cria/atualiza a Entity\\Tutor.) Tj
+T*
+() Tj
+T*
+(TutorRepository executa SQL preparado via PDO, o controller grava mensagem flash e redireciona para) Tj
+T*
+(/tutores.) Tj
+T*
+() Tj
+T*
+(Frase-chave para a apresentacao: ìController coordena; Validator verifica; Entity representa; Repository p) Tj
+T*
+(ersiste; View apresenta; Router conecta a URL ao controller; Database fornece PDO.î) Tj
+T*
+() Tj
+T*
+(7. Verificacao do enunciado) Tj
+T*
+() Tj
+T*
+(RequisitoStatusEvidencia / observacao) Tj
+T*
+() Tj
+T*
+(PHP 8+ e Orientacao a ObjetosATENDEcomposer.json exige PHP >= 8.0; o codigo usa classes, namespaces,) Tj
+T*
+(heranca, propriedades tipadas e metodos tipados.) Tj
+T*
+() Tj
+T*
+(Composer com autoload e package PHPATENDEAutoload PSR-4 para App\\; pacote monolog/monolog;) Tj
+T*
+(vendor/autoload.php carregado no front controller.) Tj
+T*
+() Tj
+T*
+(Banco relacional via PDOATENDEapp/Core/Database.php usa PDO com DSN MySQL, modo de excecao e statements) Tj
+T*
+(preparados nos repositorios.) Tj
+T*
+() Tj
+T*
+(Sistema de rotas e URLs transparentesATENDERouter registra GET/POST e reconhece parametros; exemplos:) Tj
+T*
+(/usuarios/editar/3 e /consultas/editar/5.) Tj
+T*
+() Tj
+T*
+(MVC ou semelhanteATENDEControllers coordenam fluxo, Entities/Repositories cuidam dos dados e Views) Tj
+T*
+(cuidam da apresentacao; nao usa framework PHP.) Tj
+T*
+() Tj
+T*
+(Documentacao de instalacao/configuracaoATENDEREADME.md, docs/INSTALACAO.md, config/config.example.php e) Tj
+T*
+(scripts SQL estao presentes.) Tj
+T*
+() Tj
+T*
+(Interface, feedback e errosATENDEViews usam Bootstrap via CDN; validadores retornam mensagens; existem) Tj
+T*
+(telas 403/404/500 e Monolog registra erros.) Tj
+T*
+() Tj
+T*
+(Uso de framework PHP proibidoATENDENao ha Laravel ou outro framework PHP declarado; o router e o MVC sao) Tj
+T*
+(proprios.) Tj
+T*
+() Tj
+T*
+(Scripts SQL e funcionamentoATENDEschema.sql, seed.sql e migracao de endereco estao versionados;) Tj
+T*
+(aplicacao respondeu HTTP 200 nesta maquina.) Tj
+T*
+ET
+endstream
+endobj
+16 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 18 0 R >>
+endobj
+17 0 obj
+<< /Length 2025 >>
+stream
+BT
+/F1 9 Tf
+45 800 Td
+12 TL
+() Tj
+T*
+(Trabalho desenvolvido em trioPENDENTEO README atual lista somente Andrey Felipe de Lima e Davi. O) Tj
+T*
+(enunciado exige tres integrantes. Corrigir o README e garantir que o terceiro integrante tenha) Tj
+T*
+(participacao registrada no Git.) Tj
+T*
+() Tj
+T*
+(Relatorio com nomes e particularidadesREVISARHa nomes e atividades de dois integrantes, mas falta) Tj
+T*
+(confirmar o trio e declarar bugs/funcionalidades faltantes, se existirem.) Tj
+T*
+() Tj
+T*
+(Originalidade, ausencia de plagio e entendimentoMANUALNao pode ser comprovado por analise estatica.) Tj
+T*
+(Todos devem conhecer entidades, repositorios, PDO, router, autenticacao e validacao para a apresentacao.) Tj
+T*
+() Tj
+T*
+(Temas proibidosINCOMPLETOA lista de temas proibidos nao apareceu completa no enunciado enviado. Comparar) Tj
+T*
+(o projeto com a lista oficial antes da entrega.) Tj
+T*
+() Tj
+T*
+(6. Pendencias antes da entrega) Tj
+T*
+() Tj
+T*
+(1. Confirmar o trio: adicionar o terceiro integrante real no README, com RA e atividades, e verificar se) Tj
+T*
+(os commits/publicacoes do GitHub refletem a participacao exigida. Nao inventar nome ou atividade.) Tj
+T*
+() Tj
+T*
+(2. Completar particularidades: registrar no README qualquer limitacao conhecida, por exemplo) Tj
+T*
+(dependencias locais, credenciais de teste e necessidade de executar os scripts SQL.) Tj
+T*
+() Tj
+T*
+(3. Repetir instalacao em outro computador: clonar o repositorio, executar composer install, copiar) Tj
+T*
+(config/config.example.php, importar os SQL e testar login, CRUDs, rotas com {id} e mensagens de erro.) Tj
+T*
+() Tj
+T*
+(4. Preparar apresentacao: cada integrante deve explicar uma parte propria do codigo e conseguir) Tj
+T*
+(justificar a separacao entre controller, entidade, repositorio, validador e view.) Tj
+T*
+() Tj
+T*
+(Relatorio gerado a partir do commit b1228b3. Este documento descreve evidencias do repositorio; itens de) Tj
+T*
+(autoria, originalidade, composicao do grupo e entendimento devem ser confirmados pelos alunos.) Tj
+T*
+ET
+endstream
+endobj
+xref
+0 18
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000161 00000 n 
+0000000258 00000 n 
+0000000384 00000 n 
+0000003169 00000 n 
+0000003295 00000 n 
+0000006356 00000 n 
+0000006483 00000 n 
+0000009242 00000 n 
+0000009370 00000 n 
+0000012030 00000 n 
+0000012158 00000 n 
+0000014640 00000 n 
+0000014768 00000 n 
+0000017732 00000 n 
+0000017860 00000 n 
+trailer
+<< /Size 18 /Root 1 0 R >>
+startxref
+19938
+%%EOF

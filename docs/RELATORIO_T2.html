@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <title>Relatorio tecnico - Clinica Vet</title>
+    <style>
+        @page { size: A4; margin: 16mm 15mm 17mm; }
+        :root { --ink: #1d2733; --muted: #566575; --line: #d7e0e8; --blue: #145da0; --green: #237a57; --red: #a33a3a; --amber: #9a6810; }
+        * { box-sizing: border-box; }
+        body { margin: 0; color: var(--ink); font-family: "Avenir Next", "Helvetica Neue", sans-serif; font-size: 10.5pt; line-height: 1.42; }
+        h1, h2, h3 { margin: 0 0 8px; line-height: 1.15; }
+        h1 { color: var(--blue); font-size: 26pt; }
+        h2 { color: var(--blue); font-size: 16pt; border-bottom: 2px solid var(--blue); padding-bottom: 4px; margin-top: 20px; }
+        h3 { font-size: 11.5pt; margin-top: 13px; }
+        p { margin: 5px 0 8px; }
+        ul { margin-top: 4px; padding-left: 19px; }
+        li { margin: 3px 0; }
+        code { font-family: Menlo, Monaco, monospace; font-size: 8.7pt; color: #23384d; }
+        .cover { min-height: 245mm; display: flex; flex-direction: column; justify-content: center; }
+        .eyebrow { color: var(--green); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 9pt; }
+        .subtitle { color: var(--muted); font-size: 14pt; max-width: 560px; }
+        .meta { border-left: 4px solid var(--green); padding: 8px 12px; margin-top: 24px; color: var(--muted); }
+        .page-break { page-break-before: always; }
+        .note { background: #f3f7fa; border-left: 4px solid var(--blue); padding: 9px 12px; margin: 10px 0; }
+        .warning { background: #fff7e8; border-left-color: var(--amber); }
+        .danger { background: #fff0f0; border-left-color: var(--red); }
+        table { width: 100%; border-collapse: collapse; margin: 8px 0 13px; page-break-inside: avoid; }
+        th, td { border: 1px solid var(--line); padding: 6px 7px; vertical-align: top; text-align: left; }
+        th { background: #eaf2f8; color: #183c5b; font-size: 9.5pt; }
+        td { font-size: 9.5pt; }
+        .status { width: 74px; text-align: center; font-weight: 700; white-space: nowrap; }
+        .ok { color: var(--green); }
+        .risk { color: var(--red); }
+        .check { color: var(--amber); }
+        .file { color: #183c5b; font-family: Menlo, Monaco, monospace; font-size: 8.6pt; white-space: nowrap; }
+        .small { color: var(--muted); font-size: 9pt; }
+        footer { color: var(--muted); font-size: 8pt; border-top: 1px solid var(--line); margin-top: 18px; padding-top: 5px; }
+        @media print { a { color: inherit; text-decoration: none; } }
+    </style>
+</head>
+<body>
+    <section class="cover">
+        <div class="eyebrow">Trabalho 2 - PHP / UTFPR</div>
+        <h1>Clinica Vet</h1>
+        <p class="subtitle">Relatorio tecnico de evolucao, arquivos e verificacao dos requisitos do enunciado.</p>
+        <div class="meta">
+            <strong>Repositorio:</strong> github.com/andreylima0794/clinica-vet-php<br>
+            <strong>Versao analisada:</strong> <code>b1228b3</code> (branch <code>main</code>)<br>
+            <strong>Data da analise:</strong> 03/11/2026<br>
+            <strong>Tema:</strong> gestao de tutores, animais, consultas e usuarios de uma clinica veterinaria
+        </div>
+        <div class="note warning"><strong>Conclusao executiva:</strong> o codigo demonstra a maior parte dos requisitos tecnicos do Trabalho 2. Existe, porem, uma pendencia critica: o README registra somente dois integrantes, enquanto o enunciado exige um trio obrigatorio. Esse dado precisa ser corrigido ou esclarecido antes da entrega.</div>
+    </section>
+
+    <section class="page-break">
+        <h2>1. Resumo da evolucao</h2>
+        <p>A versao atual continua o Trabalho 1 e reorganiza o sistema para uma arquitetura orientada a objetos. A mudanca principal foi retirar a responsabilidade de acesso a dados dos modelos antigos, criar entidades de dominio e concentrar consultas SQL em repositorios.</p>
+        <table>
+            <tr><th>Area</th><th>Antes</th><th>Atual</th></tr>
+            <tr><td>Estrutura de dados</td><td>Modelos misturavam representacao e acesso ao banco.</td><td><code>Entities</code> representam os objetos e <code>Repositories</code> concentram persistencia.</td></tr>
+            <tr><td>Usuarios</td><td><code>app/Models/Usuario.php</code>.</td><td><code>Usuario</code> + <code>UsuarioRepository</code>; controllers recebem dados pela nova camada.</td></tr>
+            <tr><td>Tutores, animais e consultas</td><td>Modelos e controllers da primeira versao.</td><td>Entidades tipadas, repositorios e validadores especificos por dominio.</td></tr>
+            <tr><td>Validacao</td><td>Regras concentradas ou compartilhadas de forma menos estruturada.</td><td><code>AnimalValidator</code>, <code>TutorValidator</code> e <code>ConsultaValidator</code>, apoiados pelo <code>Validator</code> base.</td></tr>
+            <tr><td>URLs</td><td>Havia uso de parametros de consulta em fluxos de edicao.</td><td>Rotas como <code>/tutores/editar/5</code>, com parametros dinamicos reconhecidos pelo router.</td></tr>
+            <tr><td>Erros</td><td>Tratamento basico.</td><td>Monolog registra excecoes em <code>storage/logs/app.log</code>; existe tela HTTP 500.</td></tr>
+            <tr><td>Dependencias</td><td>Autoload e dependencias menos completos.</td><td>Composer declara Monolog e autoload PSR-4; <code>composer.lock</code> fixa as versoes.</td></tr>
+        </table>
+
+        <h2>2. Arquivos novos ou criados na migracao</h2>
+        <table>
+            <tr><th>Arquivo</th><th>Responsabilidade</th></tr>
+            <tr><td class="file">app/Core/Repository.php</td><td>Classe base abstrata para repositorios. Mantem a conexao PDO e oferece operacoes comuns, reduzindo duplicacao.</td></tr>
+            <tr><td class="file">app/Entities/Usuario.php</td><td>Objeto de dominio do usuario, com propriedades tipadas e dados de identidade, perfil e estado.</td></tr>
+            <tr><td class="file">app/Entities/Tutor.php</td><td>Objeto de dominio do tutor, incluindo identificacao, contato e endereco.</td></tr>
+            <tr><td class="file">app/Entities/Animal.php</td><td>Objeto de dominio do animal, incluindo tutor, especie, raca, nascimento e peso.</td></tr>
+            <tr><td class="file">app/Entities/Consulta.php</td><td>Objeto de dominio da consulta, incluindo animal, veterinario, data, status e observacoes.</td></tr>
+            <tr><td class="file">app/Repositories/UsuarioRepository.php</td><td>Consulta, cria, atualiza e inativa usuarios; transforma resultados do banco em entidades.</td></tr>
+            <tr><td class="file">app/Repositories/TutorRepository.php</td><td>Persistencia e busca de tutores usando PDO e statements preparados.</td></tr>
+            <tr><td class="file">app/Repositories/AnimalRepository.php</td><td>Persistencia de animais e consultas relacionadas a tutores.</td></tr>
+            <tr><td class="file">app/Repositories/ConsultaRepository.php</td><td>Repositorio que substituiu o antigo modelo de consulta; trata agendamento, filtros e atualizacao.</td></tr>
+            <tr><td class="file">app/Validators/AnimalValidator.php</td><td>Regras de validacao dos dados de animais.</td></tr>
+            <tr><td class="file">app/Validators/TutorValidator.php</td><td>Regras de validacao dos dados de tutores.</td></tr>
+            <tr><td class="file">app/Validators/ConsultaValidator.php</td><td>Regras de validacao dos dados de consultas.</td></tr>
+        </table>
+        <p class="small">Nota: <code>app/Repositories/ConsultaRepository.php</code> e uma renomeacao/evolucao de <code>app/Models/Consulta.php</code>. Os modelos antigos de usuario, tutor e animal foram removidos; os arquivos <code>.gitkeep</code> mantem pastas vazias no repositorio.</p>
+    </section>
+
+    <section class="page-break">
+        <h2>3. Arquivos existentes que mudaram</h2>
+        <table>
+            <tr><th>Arquivo</th><th>Alteracao observada</th></tr>
+            <tr><td class="file">public/index.php</td><td>Registra as rotas da aplicacao, carrega Composer, configura Monolog, converte erros em excecoes e trata erros nao capturados.</td></tr>
+            <tr><td class="file">app/Core/Router.php</td><td>Passou a converter placeholders como <code>{id}</code> em grupos nomeados de expressao regular e encaminhar os parametros ao controller.</td></tr>
+            <tr><td class="file">app/Core/Validator.php</td><td>Recebe regras de validacao reutilizaveis e retorna mensagens por campo.</td></tr>
+            <tr><td class="file">app/Core/Auth.php</td><td>Foi adaptado para trabalhar com o repositorio de usuarios e manter autenticacao/perfis.</td></tr>
+            <tr><td class="file">app/Controllers/AnimalController.php</td><td>Passou a usar entidade, repositorio e validador de animal.</td></tr>
+            <tr><td class="file">app/Controllers/TutorController.php</td><td>Passou a usar entidade, repositorio e validador de tutor.</td></tr>
+            <tr><td class="file">app/Controllers/ConsultaController.php</td><td>Passou a usar entidade, repositorio e validador de consulta, mantendo filtros/agendamento.</td></tr>
+            <tr><td class="file">app/Controllers/UsuarioController.php</td><td>Passou a usar entidade/repositorio e rotas de edicao com <code>{id}</code>.</td></tr>
+            <tr><td class="file">app/Controllers/AuthController.php</td><td>Atualizado para a nova camada de usuarios e fluxo de login.</td></tr>
+            <tr><td class="file">app/Views/animais/*</td><td>Formularios e links foram ajustados para URLs transparentes e feedback de validacao.</td></tr>
+            <tr><td class="file">app/Views/tutores/*</td><td>Formularios e links foram ajustados para URLs transparentes e feedback de validacao.</td></tr>
+            <tr><td class="file">app/Views/consultas/*</td><td>Formularios e links foram ajustados para URLs transparentes e feedback de validacao.</td></tr>
+            <tr><td class="file">app/Views/usuarios/*</td><td>Links e formularios de edicao passaram de query string para parametro na rota.</td></tr>
+            <tr><td class="file">composer.json / composer.lock</td><td>Composer declara <code>monolog/monolog ^3.12</code>, autoload PSR-4 e dependencias travadas.</td></tr>
+            <tr><td class="file">README.md</td><td>Atualiza estrutura, tecnologias e atividades declaradas para o Trabalho 2.</td></tr>
+            <tr><td class="file">docs/INSTALACAO.md</td><td>Documenta Composer, Monolog, logs, banco, configuracao e URLs transparentes.</td></tr>
+        </table>
+
+        <h2>4. Evidencias de funcionamento</h2>
+        <ul>
+            <li>PHP local em uso: PHP 8.5.11.</li>
+            <li>Servidor iniciado com <code>php -S localhost:8000 -t public</code>.</li>
+            <li>MySQL local respondeu <code>mysqld is alive</code>.</li>
+            <li>A pagina inicial respondeu HTTP 200 apos <code>composer install</code>.</li>
+            <li>O banco pode ser criado pelo <code>database/schema.sql</code> e populado pelo <code>database/seed.sql</code>.</li>
+        </ul>
+
+        <h2>5. Mapa arquivo a arquivo</h2>
+        <h3>Entrada e nucleo da aplicacao</h3>
+        <table>
+            <tr><th>Arquivo</th><th>O que faz</th><th>Onde isso aparece na execucao</th></tr>
+            <tr><td class="file">public/index.php</td><td>Front controller: carrega Composer, inicia sessao, configura Monolog, registra rotas e despacha a requisicao.</td><td>E o primeiro arquivo executado pelo servidor PHP.</td></tr>
+            <tr><td class="file">app/Core/Router.php</td><td>Registra rotas GET/POST, transforma <code>{id}</code> em regex e chama controller/acao com parametros.</td><td>Entre a URL recebida e o controller escolhido.</td></tr>
+            <tr><td class="file">app/Core/Database.php</td><td>Cria uma conexao PDO unica usando <code>config/config.php</code>, MySQL e modo de excecao.</td><td>Usado pelos repositorios quando uma consulta SQL e executada.</td></tr>
+            <tr><td class="file">app/Core/Repository.php</td><td><strong>Novo.</strong> Classe base abstrata com conexao, busca por ID e conversao comum de linhas em entidades.</td><td>E herdado por todos os repositorios; evita repetir a infraestrutura de PDO.</td></tr>
+            <tr><td class="file">app/Core/Controller.php</td><td>Classe base com <code>render</code>, <code>redirect</code> e <code>flash</code>.</td><td>Controllers usam esses metodos para exibir views, redirecionar e enviar feedback.</td></tr>
+            <tr><td class="file">app/Core/Auth.php</td><td>Consulta o usuario autenticado na sessao e verifica login/perfil.</td><td>Protege paginas e decide permissoes de usuario, atendente e veterinario.</td></tr>
+            <tr><td class="file">app/Core/Validator.php</td><td>Validador base com regras para obrigatoriedade, CPF, telefone, CEP, UF, data, numero e listas permitidas.</td><td>E reutilizado pelos validadores especificos antes de salvar dados.</td></tr>
+        </table>
+
+        <h3>Arquivos novos de dominio</h3>
+        <table>
+            <tr><th>Arquivo</th><th>O que faz</th><th>Ponto para explicar na apresentacao</th></tr>
+            <tr><td class="file">app/Entities/Usuario.php</td><td><strong>Novo.</strong> Representa usuario com propriedades tipadas e conversao por <code>toArray</code>.</td><td>O dominio deixa de depender diretamente da linha crua do banco.</td></tr>
+            <tr><td class="file">app/Entities/Tutor.php</td><td><strong>Novo.</strong> Representa tutor e seus dados de contato/endereco; possui <code>enderecoCompleto</code> e <code>cpfFormatado</code>.</td><td>Centraliza comportamento do tutor em um objeto, em vez de espalhar formatacao nas views.</td></tr>
+            <tr><td class="file">app/Entities/Animal.php</td><td><strong>Novo.</strong> Representa animal vinculado a tutor; possui <code>idade</code> e <code>toArray</code>.</td><td>Modela o relacionamento animal-tutor e os dados tipados do cadastro.</td></tr>
+            <tr><td class="file">app/Entities/Consulta.php</td><td><strong>Novo.</strong> Representa consulta, status, animal, veterinario e observacoes; possui <code>estaCancelada</code>.</td><td>Concentra regra simples de dominio sobre o status da consulta.</td></tr>
+        </table>
+
+        <h3>Repositorios novos</h3>
+        <table>
+            <tr><th>Arquivo</th><th>Responsabilidade e principais operacoes</th></tr>
+            <tr><td class="file">app/Repositories/UsuarioRepository.php</td><td><strong>Novo.</strong> Busca por email, lista, cria, atualiza, verifica email duplicado e ativa/inativa usuarios.</td></tr>
+            <tr><td class="file">app/Repositories/TutorRepository.php</td><td><strong>Novo.</strong> Lista, cria e atualiza tutores; verifica CPF duplicado; converte linhas em <code>Tutor</code>.</td></tr>
+            <tr><td class="file">app/Repositories/AnimalRepository.php</td><td><strong>Novo.</strong> Lista, cria e atualiza animais; trata o vinculo com tutor; converte linhas em <code>Animal</code>.</td></tr>
+            <tr><td class="file">app/Repositories/ConsultaRepository.php</td><td><strong>Novo por renomeacao/evolucao.</strong> Lista com filtros, verifica conflito de agenda, lista veterinarios, cria e atualiza consultas.</td></tr>
+        </table>
+
+        <h3>Validadores novos</h3>
+        <table>
+            <tr><th>Arquivo</th><th>Responsabilidade</th></tr>
+            <tr><td class="file">app/Validators/TutorValidator.php</td><td><strong>Novo.</strong> Valida campos do tutor e consulta o repositorio para impedir CPF duplicado.</td></tr>
+            <tr><td class="file">app/Validators/AnimalValidator.php</td><td><strong>Novo.</strong> Valida campos do animal e confirma se o tutor informado existe.</td></tr>
+            <tr><td class="file">app/Validators/ConsultaValidator.php</td><td><strong>Novo.</strong> Valida animal, veterinario, data/hora e status da consulta.</td></tr>
+        </table>
+
+        <h3>Controllers</h3>
+        <table>
+            <tr><th>Arquivo</th><th>Responsabilidade</th></tr>
+            <tr><td class="file">app/Controllers/AuthController.php</td><td>Exibe login, autentica, cria sessao, redireciona por perfil e encerra sessao.</td></tr>
+            <tr><td class="file">app/Controllers/UsuarioController.php</td><td>Lista, cria, edita, atualiza e inativa usuarios; valida permissao e dados.</td></tr>
+            <tr><td class="file">app/Controllers/TutorController.php</td><td>Coordena listagem, novo cadastro e edicao de tutores.</td></tr>
+            <tr><td class="file">app/Controllers/AnimalController.php</td><td>Coordena listagem, novo cadastro e edicao de animais.</td></tr>
+            <tr><td class="file">app/Controllers/ConsultaController.php</td><td>Coordena filtros, agendamento e edicao de consultas.</td></tr>
+        </table>
+
+        <h3>Views e arquivos de suporte</h3>
+        <table>
+            <tr><th>Arquivo/pasta</th><th>O que faz</th></tr>
+            <tr><td class="file">app/Views/layout/header.php</td><td>Abre o HTML, carrega Bootstrap, navega no sistema e exibe mensagens flash.</td></tr>
+            <tr><td class="file">app/Views/layout/footer.php</td><td>Fecha a estrutura HTML e scripts da interface.</td></tr>
+            <tr><td class="file">app/Views/layout/403.php</td><td>Informa acesso proibido.</td></tr>
+            <tr><td class="file">app/Views/layout/404.php</td><td>Informa rota ou recurso nao encontrado.</td></tr>
+            <tr><td class="file">app/Views/layout/500.php</td><td>Informa erro interno sem expor o stack trace ao usuario.</td></tr>
+            <tr><td class="file">app/Views/auth/login.php</td><td>Formulario de login e mensagens de falha de autenticacao.</td></tr>
+            <tr><td class="file">app/Views/usuarios/*</td><td>Listagem e formularios de usuarios, incluindo ativacao/inativacao.</td></tr>
+            <tr><td class="file">app/Views/tutores/*</td><td>Listagem e formularios de tutores.</td></tr>
+            <tr><td class="file">app/Views/animais/*</td><td>Listagem e formularios de animais.</td></tr>
+            <tr><td class="file">app/Views/consultas/*</td><td>Listagem com filtros e formularios de consultas.</td></tr>
+            <tr><td class="file">public/css/.gitkeep / public/js/.gitkeep</td><td>Reservam as pastas para CSS e JavaScript proprios; a interface atual usa Bootstrap via CDN.</td></tr>
+        </table>
+
+        <h3>Configuracao, banco e documentacao</h3>
+        <table>
+            <tr><th>Arquivo</th><th>O que faz</th></tr>
+            <tr><td class="file">composer.json</td><td>Declara PHP >= 8, Monolog e autoload PSR-4 de <code>App\</code> para <code>app/</code>.</td></tr>
+            <tr><td class="file">composer.lock / vendor/</td><td>Fixam e disponibilizam as dependencias instaladas.</td></tr>
+            <tr><td class="file">config/config.example.php</td><td>Modelo versionado de host, porta, banco, usuario e senha.</td></tr>
+            <tr><td class="file">config/config.php</td><td>Configuracao local real; nao deve conter credenciais no Git.</td></tr>
+            <tr><td class="file">database/schema.sql</td><td>Cria banco e tabelas de usuarios, tutores, animais e consultas com chaves estrangeiras.</td></tr>
+            <tr><td class="file">database/seed.sql</td><td>Insere o usuario administrador de teste.</td></tr>
+            <tr><td class="file">database/upgrade_tutores_endereco.sql</td><td>Atualiza banco existente com campos de endereco de tutor.</td></tr>
+            <tr><td class="file">README.md</td><td>Apresenta o projeto, tecnologias, integrantes, atividades e links de instalacao/relatorio.</td></tr>
+            <tr><td class="file">docs/INSTALACAO.md</td><td>Explica requisitos, Composer, SQL, configuracao, servidor PHP, login e URLs.</td></tr>
+            <tr><td class="file">docs/RELATORIO_T2.html/.pdf</td><td>Este guia: mudancas do T1, responsabilidades dos arquivos, fluxos e auditoria do enunciado.</td></tr>
+        </table>
+
+        <h2>6. Fluxos para demonstrar</h2>
+        <h3>Fluxo A: login</h3>
+        <ol>
+            <li>O navegador acessa <code>GET /</code>.</li>
+            <li><code>public/index.php</code> inicializa Composer/sessao e entrega a rota ao <code>Router</code>.</li>
+            <li>O <code>Router</code> chama <code>AuthController::showLogin</code>, que renderiza <code>Views/auth/login.php</code>.</li>
+            <li>O formulario envia <code>POST /login</code>; <code>AuthController::login</code> usa <code>Auth</code> e <code>UsuarioRepository::findByEmail</code>.</li>
+            <li><code>Database</code> fornece PDO; o repositorio consulta MySQL e retorna <code>Entity\Usuario</code>.</li>
+            <li>Se correto, a sessao e criada e o usuario e redirecionado; se incorreto, o controller usa feedback e retorna ao login.</li>
+        </ol>
+        <h3>Fluxo B: cadastrar ou editar um tutor</h3>
+        <ol>
+            <li><code>GET /tutores/novo</code> ou <code>GET /tutores/editar/5</code> chega ao <code>Router</code>; no segundo caso, <code>{id}</code> vira parametro.</li>
+            <li><code>TutorController</code> busca um <code>Tutor</code> no <code>TutorRepository</code> e renderiza o formulario.</li>
+            <li>O POST cria os dados recebidos e chama <code>TutorValidator::validar</code>, que usa <code>Validator</code> e checa CPF duplicado.</li>
+            <li>Se houver erro, o controller envia erros para a view. Se estiver valido, cria/atualiza a <code>Entity\Tutor</code>.</li>
+            <li><code>TutorRepository</code> executa SQL preparado via PDO, o controller grava mensagem flash e redireciona para <code>/tutores</code>.</li>
+        </ol>
+        <div class="note"><strong>Frase-chave para a apresentacao:</strong> “Controller coordena; Validator verifica; Entity representa; Repository persiste; View apresenta; Router conecta a URL ao controller; Database fornece PDO.”</div>
+    </section>
+
+    <section class="page-break">
+        <h2>7. Verificacao do enunciado</h2>
+        <table>
+            <tr><th>Requisito</th><th class="status">Status</th><th>Evidencia / observacao</th></tr>
+            <tr><td>PHP 8+ e Orientacao a Objetos</td><td class="status ok">ATENDE</td><td><code>composer.json</code> exige PHP >= 8.0; o codigo usa classes, namespaces, heranca, propriedades tipadas e metodos tipados.</td></tr>
+            <tr><td>Composer com autoload e package PHP</td><td class="status ok">ATENDE</td><td>Autoload PSR-4 para <code>App\</code>; pacote <code>monolog/monolog</code>; <code>vendor/autoload.php</code> carregado no front controller.</td></tr>
+            <tr><td>Banco relacional via PDO</td><td class="status ok">ATENDE</td><td><code>app/Core/Database.php</code> usa PDO com DSN MySQL, modo de excecao e statements preparados nos repositorios.</td></tr>
+            <tr><td>Sistema de rotas e URLs transparentes</td><td class="status ok">ATENDE</td><td><code>Router</code> registra GET/POST e reconhece parametros; exemplos: <code>/usuarios/editar/3</code> e <code>/consultas/editar/5</code>.</td></tr>
+            <tr><td>MVC ou semelhante</td><td class="status ok">ATENDE</td><td>Controllers coordenam fluxo, Entities/Repositories cuidam dos dados e Views cuidam da apresentacao; nao usa framework PHP.</td></tr>
+            <tr><td>Documentacao de instalacao/configuracao</td><td class="status ok">ATENDE</td><td><code>README.md</code>, <code>docs/INSTALACAO.md</code>, <code>config/config.example.php</code> e scripts SQL estao presentes.</td></tr>
+            <tr><td>Interface, feedback e erros</td><td class="status ok">ATENDE</td><td>Views usam Bootstrap via CDN; validadores retornam mensagens; existem telas 403/404/500 e Monolog registra erros.</td></tr>
+            <tr><td>Uso de framework PHP proibido</td><td class="status ok">ATENDE</td><td>Nao ha Laravel ou outro framework PHP declarado; o router e o MVC sao proprios.</td></tr>
+            <tr><td>Scripts SQL e funcionamento</td><td class="status ok">ATENDE</td><td><code>schema.sql</code>, <code>seed.sql</code> e migracao de endereco estao versionados; aplicacao respondeu HTTP 200 nesta maquina.</td></tr>
+            <tr><td>Trabalho desenvolvido em trio</td><td class="status risk">PENDENTE</td><td>O README atual lista somente Andrey Felipe de Lima e Davi. O enunciado exige tres integrantes. Corrigir o README e garantir que o terceiro integrante tenha participacao registrada no Git.</td></tr>
+            <tr><td>Relatorio com nomes e particularidades</td><td class="status check">REVISAR</td><td>Ha nomes e atividades de dois integrantes, mas falta confirmar o trio e declarar bugs/funcionalidades faltantes, se existirem.</td></tr>
+            <tr><td>Originalidade, ausencia de plagio e entendimento</td><td class="status check">MANUAL</td><td>Nao pode ser comprovado por analise estatica. Todos devem conhecer entidades, repositorios, PDO, router, autenticacao e validacao para a apresentacao.</td></tr>
+            <tr><td>Temas proibidos</td><td class="status check">INCOMPLETO</td><td>A lista de temas proibidos nao apareceu completa no enunciado enviado. Comparar o projeto com a lista oficial antes da entrega.</td></tr>
+        </table>
+
+        <h2>6. Pendencias antes da entrega</h2>
+        <div class="note danger"><strong>1. Confirmar o trio:</strong> adicionar o terceiro integrante real no README, com RA e atividades, e verificar se os commits/publicacoes do GitHub refletem a participacao exigida. Nao inventar nome ou atividade.</div>
+        <div class="note warning"><strong>2. Completar particularidades:</strong> registrar no README qualquer limitacao conhecida, por exemplo dependencias locais, credenciais de teste e necessidade de executar os scripts SQL.</div>
+        <div class="note warning"><strong>3. Repetir instalacao em outro computador:</strong> clonar o repositorio, executar <code>composer install</code>, copiar <code>config/config.example.php</code>, importar os SQL e testar login, CRUDs, rotas com <code>{id}</code> e mensagens de erro.</div>
+        <div class="note"><strong>4. Preparar apresentacao:</strong> cada integrante deve explicar uma parte propria do codigo e conseguir justificar a separacao entre controller, entidade, repositorio, validador e view.</div>
+
+        <footer>Relatorio gerado a partir do commit <code>b1228b3</code>. Este documento descreve evidencias do repositorio; itens de autoria, originalidade, composicao do grupo e entendimento devem ser confirmados pelos alunos.</footer>
+    </section>
+</body>
+</html>
