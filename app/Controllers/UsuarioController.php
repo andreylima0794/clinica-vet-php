@@ -4,15 +4,16 @@ namespace App\Controllers;
 
 use App\Core\Auth;
 use App\Core\Controller;
-use App\Models\Usuario;
+use App\Entities\Usuario;
+use App\Repositories\UsuarioRepository;
 
 class UsuarioController extends Controller
 {
-    private Usuario $usuarios;
+    private UsuarioRepository $usuarios;
 
     public function __construct()
     {
-        $this->usuarios = new Usuario();
+        $this->usuarios = new UsuarioRepository();
     }
 
     public function index(): void
@@ -43,7 +44,12 @@ class UsuarioController extends Controller
         }
 
         $hash = password_hash($dados['senha'], PASSWORD_DEFAULT);
-        $this->usuarios->create($dados['nome'], $dados['email'], $hash, $dados['perfil']);
+        $this->usuarios->create(new Usuario(
+            nome: $dados['nome'],
+            email: $dados['email'],
+            perfil: $dados['perfil'],
+            senha: $hash,
+        ));
 
         $this->flash('sucesso', 'Usuário cadastrado com sucesso.');
         $this->redirect('/usuarios');
@@ -79,7 +85,12 @@ class UsuarioController extends Controller
             $this->redirect("/usuarios/editar/{$id}");
         }
 
-        $this->usuarios->update($id, $dados['nome'], $dados['email'], $dados['perfil']);
+        $this->usuarios->update(new Usuario(
+            id: $id,
+            nome: $dados['nome'],
+            email: $dados['email'],
+            perfil: $dados['perfil'],
+        ));
 
         $this->flash('sucesso', 'Usuário atualizado com sucesso.');
         $this->redirect('/usuarios');
@@ -92,7 +103,7 @@ class UsuarioController extends Controller
         $usuario = $this->usuarios->find($id);
 
         if ($usuario) {
-            $this->usuarios->setAtivo($id, !$usuario['ativo']);
+            $this->usuarios->setAtivo($usuario, !$usuario->ativo);
         }
 
         $this->redirect('/usuarios');
@@ -118,7 +129,7 @@ class UsuarioController extends Controller
             $erros[] = 'Já existe um usuário com esse e-mail.';
         }
 
-        if (!in_array($perfil, ['admin', 'atendente', 'veterinario'], true)) {
+        if (!in_array($perfil, Usuario::PERFIS, true)) {
             $erros[] = 'Perfil inválido.';
         }
 

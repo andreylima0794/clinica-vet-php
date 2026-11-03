@@ -2,22 +2,22 @@
 <h1>
     <?= $usuario ? 'Editar usuário' : 'Novo usuário' ?>
 </h1>
-<form method="post" action="<?= $usuario ? '/usuarios/editar/' . $usuario['id'] : '/usuarios/novo' ?>">
+<form method="post" action="<?= $usuario ? '/usuarios/editar/' . $usuario->id : '/usuarios/novo' ?>">
     <div class="mb-3">
         <label class="form-label">Nome</label>
         <input type="text" name="nome" class="form-control"
-            value="<?= htmlspecialchars($old['nome'] ?? $usuario['nome'] ?? '') ?>" required>
+            value="<?= htmlspecialchars($old['nome'] ?? $usuario?->nome ?? '') ?>" required>
     </div>
     <div class="mb-3">
         <label class="form-label">E-mail</label>
         <input type="email" name="email" class="form-control"
-            value="<?= htmlspecialchars($old['email'] ?? $usuario['email'] ?? '') ?>" required>
+            value="<?= htmlspecialchars($old['email'] ?? $usuario?->email ?? '') ?>" required>
     </div>
     <div class="mb-3">
         <label class="form-label">Perfil</label>
         <select name="perfil" class="form-select">
             <?php foreach (['admin', 'atendente', 'veterinario'] as $perfil): ?>
-                <option value="<?= $perfil ?>" <?= ($old['perfil'] ?? $usuario['perfil'] ?? '') === $perfil ? 'selected' : '' ?>>
+                <option value="<?= $perfil ?>" <?= ($old['perfil'] ?? $usuario?->perfil ?? '') === $perfil ? 'selected' : '' ?>>
                     <?= ucfirst($perfil) ?>
                 </option>
             <?php endforeach; ?>

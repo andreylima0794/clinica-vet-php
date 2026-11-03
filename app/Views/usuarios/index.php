@@ -16,15 +16,15 @@
     <tbody>
         <?php foreach ($usuarios as $u): ?>
             <tr>
-                <td><?= htmlspecialchars($u['nome']) ?></td>
-                <td><?= htmlspecialchars($u['email']) ?></td>
-                <td><?= htmlspecialchars($u['perfil']) ?></td>
-                <td><?= $u['ativo'] ? 'Ativo' : 'Inativo' ?></td>
+                <td><?= htmlspecialchars($u->nome) ?></td>
+                <td><?= htmlspecialchars($u->email) ?></td>
+                <td><?= htmlspecialchars($u->perfil) ?></td>
+                <td><?= $u->ativo ? 'Ativo' : 'Inativo' ?></td>
                 <td class="text-end">
-                    <a href="/usuarios/editar/<?= $u['id'] ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
-                    <form method="post" action="/usuarios/inativar/<?= $u['id'] ?>" class="d-inline">
+                    <a href="/usuarios/editar/<?= $u->id ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
+                    <form method="post" action="/usuarios/inativar/<?= $u->id ?>" class="d-inline">
                         <button class="btn btn-sm btn-outline-danger" type="submit">
-                            <?= $u['ativo'] ? 'Inativar' : 'Ativar' ?>
+                            <?= $u->ativo ? 'Inativar' : 'Ativar' ?>
                         </button>
                     </form>
                 </td>

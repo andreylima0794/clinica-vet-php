@@ -1,7 +1,8 @@
 {
     "name": "andreylima0794/clinica-vet-php",
-    "description": "Sistema de Gestao de Clinica Veterinaria - Trabalho 1 (PHP 8+)",
+    "description": "Sistema de Gestao de Clinica Veterinaria - Trabalho 2 (PHP 8+)",
     "type": "project",
+    "license": "proprietary",
     "require": {
         "php": ">=8.0",
         "monolog/monolog": "^3.12"

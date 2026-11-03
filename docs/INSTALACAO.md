@@ -50,5 +50,14 @@ Exceções não tratadas são registradas em `storage/logs/app.log` (criado auto
 na primeira requisição que gerar erro). Essa pasta não é versionada no Git.
 
 ## URLs
-As rotas de usuários usam URL transparente, por exemplo: `/usuarios/editar/3`
-(o `3` é o id do usuário, direto na URL, sem query string).
+Ao acessar `http://localhost:8000/`, o sistema abre a tela de login.
+As rotas usam URLs transparentes, com o identificador no caminho e sem query
+string, por exemplo:
+
+- `/usuarios/editar/3`
+- `/tutores/editar/5`
+- `/animais/editar/5`
+- `/consultas/editar/5`
+
+As páginas de listagem ficam disponíveis em `/usuarios`, `/tutores`, `/animais`
+e `/consultas`.

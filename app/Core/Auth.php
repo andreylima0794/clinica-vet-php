@@ -2,14 +2,16 @@
 
 namespace App\Core;
 
+use App\Entities\Usuario;
+
 class Auth
 {
-    public static function login(array $usuario): void
+    public static function login(Usuario $usuario): void
     {
         session_regenerate_id(true);
-        $_SESSION['usuario_id'] = $usuario['id'];
-        $_SESSION['usuario_nome'] = $usuario['nome'];
-        $_SESSION['usuario_perfil'] = $usuario['perfil'];
+        $_SESSION['usuario_id'] = $usuario->id;
+        $_SESSION['usuario_nome'] = $usuario->nome;
+        $_SESSION['usuario_perfil'] = $usuario->perfil;
     }
 
     public static function logout(): void
@@ -49,11 +51,8 @@ class Auth
         self::requireLogin();
 
         if ($_SESSION['usuario_perfil'] !== $perfil) {
-            $_SESSION['flash'][] = [
-                'tipo' => 'erro',
-                'mensagem' => 'Você não tem permissão para acessar essa página.',
-            ];
-            header('Location: /consultas');
+            http_response_code(403);
+            require __DIR__ . '/../Views/layout/403.php';
             exit;
         }
     }

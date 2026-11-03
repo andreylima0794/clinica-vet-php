@@ -38,6 +38,7 @@ set_exception_handler(function (\Throwable $e) use ($logger) {
 
 $router = new Router();
 
+$router->get('/', [AuthController::class, 'showLogin']);
 $router->get('/login', [AuthController::class, 'showLogin']);
 $router->post('/login', [AuthController::class, 'login']);
 $router->post('/logout', [AuthController::class, 'logout']);

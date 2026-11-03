@@ -4,14 +4,14 @@ namespace App\Controllers;
 
 use App\Core\Auth;
 use App\Core\Controller;
-use App\Models\Usuario;
+use App\Repositories\UsuarioRepository;
 
 class AuthController extends Controller
 {
     public function showLogin(): void
     {
         if (Auth::check()) {
-            $this->redirect('/usuarios');
+            $this->redirect($this->paginaInicial());
         }
 
         $this->render('auth/login', ['old' => $_SESSION['old'] ?? []]);
@@ -29,21 +29,28 @@ class AuthController extends Controller
             $this->redirect('/login');
         }
 
-        $usuario = (new Usuario())->findByEmail($email);
+        $usuario = (new UsuarioRepository())->findByEmail($email);
 
-        if (!$usuario || !password_verify($senha, $usuario['senha']) || !$usuario['ativo']) {
+        if (!$usuario || !password_verify($senha, $usuario->senha) || !$usuario->ativo) {
             $this->flash('erro', 'E-mail ou senha inválidos.');
             $_SESSION['old'] = ['email' => $email];
             $this->redirect('/login');
         }
 
         Auth::login($usuario);
-        $this->redirect('/usuarios');
+        $this->redirect($this->paginaInicial());
     }
 
     public function logout(): void
     {
         Auth::logout();
         $this->redirect('/login');
+    }
+
+    private function paginaInicial(): string
+    {
+        $usuario = Auth::user();
+
+        return $usuario !== null && $usuario['perfil'] === 'admin' ? '/usuarios' : '/consultas';
     }
 }
